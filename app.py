@@ -1,3 +1,4 @@
+import traceback
 from flask import Flask, request, render_template, send_file
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -87,7 +88,9 @@ def index():
             report_file = generate_word_report(tasks, start_date, end_date)
             return send_file(report_file, as_attachment=True)
         except Exception as e:
-            return f"Erro: {e}"
+            error_details = traceback.format_exc()  # Captura o traceback completo
+            print("Erro detectado:\n", error_details)  # Exibe no terminal
+        return f"<pre>Erro: {error_details}</pre>"  # Exibe na página
 
     return render_template("index.html")
 
